@@ -55,5 +55,13 @@ export async function handleDecrypt(req, res) {
     const dataHex = Buffer.from(string.replace(/\s+/g, ''), 'hex');
     
     const signature = await decrypter.signDataHex(dataHex);
-    return await formatHexToInt(signature);
+    const data = await formatHexToInt(signature);
+    
+    let resData = {};
+    resData["data"] = data;
+    resData["size"] = data.length;
+
+    console.log(`Signature ${data}`);
+    res.writeHead(200, { 'Content-type': 'application/json'});
+    res.end(JSON.stringify(resData));
 }
