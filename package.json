@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "main": "node main.js",
+    "emul": "node emulate.js",
+    "dev": "concurrently -n SERVER,CLIENT -c yellow,blue \"npm run main\" \"npm run emul\""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "concurrently": "^9.2.1",
+    "node-forge": "^1.4.0"
+  }
+}
