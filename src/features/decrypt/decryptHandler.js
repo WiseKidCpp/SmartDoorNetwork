@@ -1,5 +1,7 @@
 import crypto from 'crypto';
 import { readFile } from 'node:fs/promises';
+import { getParsedJsonReq } from '../../shared/lib/parseReqData.js';
+import { formatHexToInt } from '../../shared/lib/formatter.js';
 
 export class Decrypter {
     privateKey = '';
@@ -13,7 +15,7 @@ export class Decrypter {
         }
     }
 
-    async signData(data) {
+    async signDataBase64(data) {
         if (!this.privateKey) {
             throw new Error(`Private key not loaded.`);
         }
@@ -38,6 +40,20 @@ export class Decrypter {
         sign.end();
         
         const signature = sign.sign(this.privateKey, 'hex');
+        console.log(signature);
         return signature;
     }
+}
+
+export async function handleDecrypt(req, res) {
+    const decrypter = new Decrypter();
+    await decrypter.getPrivateKey();
+
+    const jsonData = await getParsedJsonReq(req);
+    const string = jsonData["string"];
+    console.log(`String ${string}`);
+    const dataHex = Buffer.from(string.replace(/\s+/g, ''), 'hex');
+    
+    const signature = await decrypter.signDataHex(dataHex);
+    return await formatHexToInt(signature);
 }
