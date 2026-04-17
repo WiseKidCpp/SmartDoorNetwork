@@ -4,8 +4,8 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "main": "node main.js",
-    "emul": "node emulate.js",
+    "main": "node ./server/src/app/server.js",
+    "emul": "node ./server/emulate.js",
     "dev": "concurrently -n SERVER,CLIENT -c yellow,blue \"npm run main\" \"npm run emul\""
   },
   "author": "",
