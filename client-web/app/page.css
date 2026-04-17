@@ -1,0 +1,68 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+html {
+    --blue-bg: rgb(40, 40, 54);
+    --light-blue-bg: rgb(104, 104, 139);
+    --font1: 18px;
+    --blue-bg-rgb: 40, 40, 54;
+    font-weight: bold;
+    color: white;
+    font-family: "Inter", sans-serif;
+    user-select: none;
+    height: 100%;
+}
+
+.pageContainer {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+button {
+    width: 35px;
+    height: 35px;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+h1 {
+    text-align: center;
+}
+
+.text {
+    color: black;
+    font-size: var(--font1);
+}
+
+.rowContainer {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.smallContainer {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 500px;
+    width: 250px;
+}
+
+.errorText {
+    color: rgb(151, 128, 25);
+    margin-top: 10px;
+    font-size: var(--font1);
+}

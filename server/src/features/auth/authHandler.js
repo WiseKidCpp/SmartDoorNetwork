@@ -8,12 +8,17 @@ export async function handleSignIn(req, res) {
     const password = jsonData["password"];
 
     let id = await FindUser(email, password);
-    console.log(`User id: ${id}`);
-
-    res.writeHead(200, { 'Content-type': 'application/json'});
-    let resData = JSON.parse('{}');
-    resData["data"] = "Success";
-    res.end(JSON.stringify(resData));
+    if (id != null) {
+        res.writeHead(200, { 'Content-type': 'application/json'});
+        let resData = JSON.parse('{}');
+        resData["data"] = "Success";
+        res.end(JSON.stringify(resData));
+    } else {
+        res.writeHead(401, { 'Content-type': 'application/json'});
+        let resData = JSON.parse('{}');
+        resData["error"] = "Incorrect credentials";
+        res.end(JSON.stringify(resData));
+    }
 }
 
 export async function handleSignUp(req, res) {
