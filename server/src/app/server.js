@@ -1,8 +1,10 @@
+import 'dotenv/config';
 import http from 'node:http';
 import { handleDecrypt } from '../features/decrypt/decryptHandler.js';
 import { handleErrorNotFound, handleInternalServerError } from '../features/error/errorHandler.js';
 import { NewUser } from '../entities/user/userApi.js';
 import { handleSignIn, handleSignUp } from '../features/auth/authHandler.js';
+import { authenticateToken, refreshTokens } from '../shared/lib/jwt.js';
 
 const port = 3030;
 
@@ -25,13 +27,20 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    console.log(`Request: ${pathname}`);
+
     try {
         if (req.method == 'POST' && pathname == `/api/decrypt`) {
-            await handleDecrypt(req, res);
+            if (await authenticateToken(req, res)) {
+                console.log(`Provided access token is correct!`);
+                await handleDecrypt(req, res);
+            } 
         } else if (req.method == 'POST' && pathname == `/api/signin`) {
             await handleSignIn(req, res);
         } else if (req.method == 'POST' && pathname == `/api/signup`) {
             await handleSignUp(req, res);
+        } else if (req.method == 'POST' && pathname == `/api/refresh`) {
+            await refreshTokens(req, res);
         } else {
             await handleErrorNotFound(req, res);
         }

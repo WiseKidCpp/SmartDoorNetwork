@@ -1,3 +1,6 @@
 node_modules
 storage
 .next
+.env
+out
+android

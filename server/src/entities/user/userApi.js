@@ -21,6 +21,7 @@ export async function NewUser(email, password) {
     data["userscount"] = count + 1;
     const res = JSON.stringify(data, null, 4);
     await writeFile('./storage/users.json', res)
+    return user;
 }
 
 export async function FindUser(email, password) {
@@ -31,15 +32,15 @@ export async function FindUser(email, password) {
     } catch(err) {
         data = {};
     }
-    let id = null;
+    let user = null;
     if (!data["users"]) return null;
     for (let i = 0; i < data["users"].length; i++) {
         if (data["users"][i]["password"] == password && data["users"][i]["email"] == email) {
-            id = data["users"][i]["id"];
+            user = data["users"][i];
             break;
         }
     }
-    return id;
+    return user;
 }
 
 export async function FindUserEmail(email) {
@@ -50,13 +51,13 @@ export async function FindUserEmail(email) {
     } catch(err) {
         data = {};
     }
-    let id = null;
+    let user = null;
     if (!data["users"]) return null;
     for (let i = 0; i < data["users"].length; i++) {
         if (data["users"][i]["email"] == email) {
-            id = data["users"][i]["id"];
+            user = data["users"][i];
             break;
         }
     }
-    return id;
+    return user;
 }

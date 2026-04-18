@@ -25,7 +25,6 @@ export class Decrypter {
         sign.end();
         
         const signature = sign.sign(this.privateKey, 'hex');
-        console.log(`SignatureSIGN: ${signature}`);
         const dataStr = Buffer.from(signature, 'hex').toString('base64');
         return dataStr;
     }
@@ -40,7 +39,6 @@ export class Decrypter {
         sign.end();
         
         const signature = sign.sign(this.privateKey, 'hex');
-        console.log(signature);
         return signature;
     }
 }
@@ -51,7 +49,6 @@ export async function handleDecrypt(req, res) {
 
     const jsonData = await getParsedJsonReq(req);
     const string = jsonData["string"];
-    console.log(`String ${string}`);
     const dataHex = Buffer.from(string.replace(/\s+/g, ''), 'hex');
     
     const signature = await decrypter.signDataHex(dataHex);
@@ -61,7 +58,6 @@ export async function handleDecrypt(req, res) {
     resData["data"] = data;
     resData["size"] = data.length;
 
-    console.log(`Signature ${data}`);
     res.writeHead(200, { 'Content-type': 'application/json'});
     res.end(JSON.stringify(resData));
 }
