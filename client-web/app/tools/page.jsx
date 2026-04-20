@@ -6,6 +6,7 @@ import InputField from "../components/inputField/inputField.jsx";
 import RedirectButton from "../components/redirectButton/redirectButton.jsx";
 import Header from "../components/header/header.jsx";
 import LogoutButton from "../components/logoutButton/logoutButton.jsx";
+import Cookies from 'js-cookie';
 
 function post() {
     console.log("Pressed");
@@ -13,23 +14,24 @@ function post() {
 
 export default function Page() {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [id, setId] = useState('');
     const [info, setInfo] = useState('');
 
     const serverAddr = "http://127.0.0.1:3030";
 
     async function sendRequest() {
         try {
-            const path = "/api/signup";
+            const path = "/api/newtenant";
         
             let reqData = {};
-            reqData["password"] = password;
             reqData["email"] = email;
-            
+            reqData["id"] = id;
+            console.log(Cookies.get('access-token'));
             const response = await fetch(serverAddr + path, {
                 method: 'POST',
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${Cookies.get('access-token')}`
                 },
                 body: JSON.stringify(reqData)
             });
@@ -37,20 +39,20 @@ export default function Page() {
             const resData = await response.json();
             if (!response.ok) {
                 console.log(`Error: ${resData["error"]}`);
+                setInfo("Проверьте корректность введенных данных");
                 return;
             }
 
-            setInfo("Регистрация прошла успешно!");
+            setInfo("Доступ выдан успешно!");
         } catch (err) {
             console.error(err);
         }
     }
 
-    async function handleAuthClick() {
+    async function handleClick() {
         console.log(`Email: ${email}`);
-        console.log(`Password: ${password}`);
-        if (email.length <= 5 || password.length <= 5) {
-            setInfo("Длина пароля или почты меньше 5 символов")
+        if (email.length < 5) {
+            setInfo("Длина почты меньше 5 символов")
             return;
         }
         await sendRequest();
@@ -58,14 +60,14 @@ export default function Page() {
 
     return (
         <>
-            <Header text="Инструменты"/>
+            <Header text="Выдача аренды"/>
             <LogoutButton/>
             <div className="pageContainer">
-                <div className="text">Почта:</div>
-                <InputField text="email" value={email} onChange={(e) => setEmail(e.target.value)}></InputField>
-                <div className="text">Пароль:</div>
-                <InputField text="password" value={password} onChange={(e) => setPassword(e.target.value)}></InputField>
-                <AuthButton text="Регистрация" handleClick={handleAuthClick}/>
+                <div className="text">Email пользователя</div>
+                <InputField text="email" value={email} onChange={(e) => setEmail(e.target.value)} type="text"></InputField>
+                <div className="text">Id жилья</div>
+                <InputField text="id" value={id} onChange={(e) => setId(e.target.value)} type="text"></InputField>
+                <AuthButton text="Добавить" handleClick={handleClick}/>
                 <div className="errorText">{info}</div>
             </div>
         </>

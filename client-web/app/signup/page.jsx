@@ -46,7 +46,7 @@ export default function Page() {
 
             setInfo("Регистрация прошла успешно!");
             
-            window.location.href = '/';
+            window.location.href = '/tools';
         } catch (err) {
             console.error(err);
         }
@@ -55,7 +55,7 @@ export default function Page() {
     async function handleAuthClick() {
         console.log(`Email: ${email}`);
         console.log(`Password: ${password}`);
-        if (email.length <= 5 || password.length <= 5) {
+        if (email.length < 5 || password.length < 5) {
             setInfo("Длина пароля или почты меньше 5 символов")
             return;
         }

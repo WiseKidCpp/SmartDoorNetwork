@@ -46,7 +46,7 @@ export default function Page() {
 
             setInfo("Вход произведен успешно!");
 
-            window.location.href = '/';
+            window.location.href = '/tools';
         } catch (err) {
             console.error(err);
         }
