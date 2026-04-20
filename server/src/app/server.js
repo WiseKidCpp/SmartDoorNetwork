@@ -45,7 +45,7 @@ const server = http.createServer(async (req, res) => {
         } else if (req.method == 'POST' && pathname == `/api/newtenant`) {
             const user = await authenticateToken(req, res);
             if (user == null) return;
-            await handleNewTenant(req, res, user);
+            await handleNewTenant(req, res);
         } else if (req.method == 'GET' && pathname == `/api/getid`) {
             const user = await authenticateToken(req, res);
             if (user == null) return;

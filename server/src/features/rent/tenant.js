@@ -1,10 +1,11 @@
+import { FindUserEmail } from "../../entities/user/userApi.js";
 import { getParsedJsonReq } from "../../shared/lib/parseReqData.js";
 import { handleInternalServerError } from "../error/errorHandler.js";
 import { readFile, writeFile } from 'node:fs/promises';
 
-export async function handleNewTenant(req, res, user) {
-    const jsonData = await getParsedJsonReq(req);
+export async function handleNewTenant(req, res) {
     try {
+        const jsonData = await getParsedJsonReq(req);
         const lockId = jsonData["id"];
         let rawData = await readFile('./storage/access.json', 'utf-8');
         let data;
@@ -13,11 +14,12 @@ export async function handleNewTenant(req, res, user) {
         } catch(err) {
             data = {};
         }
+        const user = await FindUserEmail(jsonData["email"]);
         data[user.id] = lockId;
-        console.log(`New owner!`);
         await writeFile('./storage/access.json', JSON.stringify(data, null, 4));
         res.writeHead(200, { 'Content-type': 'application/json'});
-        res.end(JSON.stringify(resData));
+        console.log(`New owner!`);
+        res.end(JSON.stringify("{}"));
     } catch(err) {
         await handleInternalServerError(req, res);
         return;
@@ -40,10 +42,10 @@ export async function handleTenantData(req, res, user) {
         }
         await writeFile('./storage/access.json', JSON.stringify(data, null, 4));
         res.writeHead(200, { 'Content-type': 'application/json'});
-        let reqData = {};
-        reqData["id"] = data[user.id];
-        console.log(data[user.id]);
-        res.end(JSON.stringify(reqData));
+        let resData = {};
+        resData["id"] = data[user.id];
+        //console.log(data[user.id]);
+        res.end(JSON.stringify(resData));
     } catch(err) {
         console.error(err);
         await handleInternalServerError(req, res);
