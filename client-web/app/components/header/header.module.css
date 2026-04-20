@@ -1,0 +1,4 @@
+.topBarMainPage {
+    background-color: var(--blue-bg);
+    -webkit-app-region: drag;
+}

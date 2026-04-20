@@ -2,10 +2,10 @@
 
 import styles from './inputField.module.css';
 
-export default function InputField({ text, value, onChange }) {
+export default function InputField({ text, value, onChange, type }) {
     return (
         <>
-            <input type="text" placeholder={text} value={value} onChange={onChange} className={styles.inputField}/>
+            <input type={type} placeholder={text} value={value} onChange={onChange} className={styles.inputField}/>
         </>
     );
 }

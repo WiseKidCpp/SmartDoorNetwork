@@ -9,6 +9,7 @@ html {
     --blue-bg: rgb(40, 40, 54);
     --light-blue-bg: rgb(104, 104, 139);
     --font1: 18px;
+    --font2: 20px;
     --blue-bg-rgb: 40, 40, 54;
     font-weight: bold;
     color: white;
@@ -36,6 +37,7 @@ button {
 
 h1 {
     text-align: center;
+    font-size: var(--font2);
 }
 
 .text {
@@ -62,7 +64,8 @@ h1 {
 }
 
 .errorText {
-    color: rgb(151, 128, 25);
+    color: rgb(255, 123, 0);
     margin-top: 10px;
+    font-weight: 300;
     font-size: var(--font1);
 }

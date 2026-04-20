@@ -119,3 +119,10 @@ export async function authenticateToken(req, res) {
         return null;
     }
 }
+
+export async function handleCheckToken(req, res) {
+    const user = await authenticateToken(req, res);
+    if (!user) return;
+    res.writeHead(200, { 'Content-type': 'application/json'});
+    res.end();
+}
