@@ -8,7 +8,7 @@ export async function generateAccessToken(user) {
     return jwt.sign(
         { id: user["id"], email: user["email"] },
         process.env.JWT_ACCESS_SECRET,
-        { expiresIn: '1m' }
+        { expiresIn: '15m' }
     );
 }
 

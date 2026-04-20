@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { readFile } from 'node:fs/promises';
 import { getParsedJsonReq } from '../../shared/lib/parseReqData.js';
 import { formatHexToInt } from '../../shared/lib/formatter.js';
+import { handleIncorrectData } from '../error/errorHandler.js';
 
 export class Decrypter {
     privateKey = '';
@@ -49,6 +50,14 @@ export async function handleDecrypt(req, res) {
 
     const jsonData = await getParsedJsonReq(req);
     const string = jsonData["string"];
+    const id = jsonData["id"];
+    for (let i = 0; i < id.length; i++) {
+        if (string[i] != id[i]) {
+            await handleIncorrectData(req, res);
+            return;
+        }
+    }
+    
     const dataHex = Buffer.from(string.replace(/\s+/g, ''), 'hex');
     
     const signature = await decrypter.signDataHex(dataHex);
@@ -57,6 +66,9 @@ export async function handleDecrypt(req, res) {
     let resData = {};
     resData["data"] = data;
     resData["size"] = data.length;
+
+    console.log(`Sign: ${resData["data"]}`);
+    console.log(`String: ${string}`);
 
     res.writeHead(200, { 'Content-type': 'application/json'});
     res.end(JSON.stringify(resData));

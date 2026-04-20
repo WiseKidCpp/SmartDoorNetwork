@@ -11,3 +11,10 @@ export async function handleInternalServerError(req, res) {
     resData["error"] = "Internal server error";
     res.end(JSON.stringify(resData));
 }
+
+export async function handleIncorrectData(req, res) {
+    res.writeHead(400, { 'Content-type': 'application/json'});
+    let resData = {};
+    resData["error"] = "Incorrect";
+    res.end(JSON.stringify(resData));
+}

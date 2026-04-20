@@ -1,10 +1,11 @@
 import 'dotenv/config';
 import http from 'node:http';
 import { handleDecrypt } from '../features/decrypt/decryptHandler.js';
-import { handleErrorNotFound, handleInternalServerError } from '../features/error/errorHandler.js';
+import { handleErrorNotFound, handleIncorrectData, handleInternalServerError } from '../features/error/errorHandler.js';
 import { NewUser } from '../entities/user/userApi.js';
 import { handleSignIn, handleSignUp } from '../features/auth/authHandler.js';
 import { authenticateToken, refreshTokens } from '../shared/lib/jwt.js';
+import { handleNewTenant, handleTenantData } from '../features/rent/tenant.js';
 
 const port = 3030;
 
@@ -34,13 +35,21 @@ const server = http.createServer(async (req, res) => {
             if (await authenticateToken(req, res)) {
                 console.log(`Provided access token is correct!`);
                 await handleDecrypt(req, res);
-            } 
+            }
         } else if (req.method == 'POST' && pathname == `/api/signin`) {
             await handleSignIn(req, res);
         } else if (req.method == 'POST' && pathname == `/api/signup`) {
             await handleSignUp(req, res);
         } else if (req.method == 'POST' && pathname == `/api/refresh`) {
             await refreshTokens(req, res);
+        } else if (req.method == 'POST' && pathname == `/api/newtenant`) {
+            const user = await authenticateToken(req, res);
+            if (user == null) return;
+            await handleNewTenant(req, res, user);
+        } else if (req.method == 'GET' && pathname == `/api/getid`) {
+            const user = await authenticateToken(req, res);
+            if (user == null) return;
+            await handleTenantData(req, res, user);
         } else {
             await handleErrorNotFound(req, res);
         }
